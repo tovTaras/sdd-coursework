@@ -1,0 +1,32 @@
+.modalContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20rem;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.datePicker {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.datePicker:focus {
+  outline: none;
+  border-color: #007bff; /* blue color when focused */
+}
+.sendButton {
+  height: 2rem;
+  width: 40%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.sendButton:hover {
+  background-color: #0056b3;
+}
