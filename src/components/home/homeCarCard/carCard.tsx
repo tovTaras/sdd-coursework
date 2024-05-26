@@ -1,19 +1,27 @@
 import React, { useState } from "react";
-import CarCardModal from "../carCardModal/carCardModal"; // Correct import with uppercase C
+import CarCardModal from "../carCardModal/carCardModal"; 
 import styles from "./carCard.module.css";
 
 interface Car {
+  id: number;
   name: string;
-  model: string;
   year: number;
-  pricePerDay: number;
-  available: boolean;
-  image: string;
+
+  price_per_day: number;
+
+  car_brand: string;
+  car_type: string;
+
+  penalty_amount: number;
 }
 
 interface CarCardProps {
   car: Car;
 }
+
+
+
+
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,23 +33,25 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const closeModal = () => {
     setIsOpen(false);
   };
-
+  
   return (
     <div className={styles.carCard}>
-      <img src={car.image} alt={car.name} className={styles.carImage} />
-      <div className="car-details">
+      <div className={styles.carDetails}>
         <h2>{car.name}</h2>
         <p>
-          <strong>Model:</strong> {car.model}
+          <strong>Brand:</strong> {car.car_brand}
+        </p>
+        <p>
+          <strong>Type:</strong> {car.car_type}
         </p>
         <p>
           <strong>Year:</strong> {car.year}
         </p>
         <p>
-          <strong>Price per Day:</strong> ${car.pricePerDay}
+          <strong>Price per Day:</strong> {car.price_per_day}$
         </p>
         <p>
-          <strong>Available:</strong> {car.available ? "Yes" : "No"}
+          <strong>Penalty:</strong> {car.penalty_amount}$
         </p>
       </div>
       <button
@@ -50,8 +60,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
       >
         {isOpen ? "Close Modal" : "Book"}
       </button>
-      <CarCardModal isOpen={isOpen} onClose={closeModal} />{" "}
-      {/* Correct usage with uppercase C */}
+      <CarCardModal carId={car.id} isOpen={isOpen} onClose={closeModal} />
     </div>
   );
 };

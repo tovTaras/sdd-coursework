@@ -1,40 +1,75 @@
 import React, { useState } from "react";
 import styles from "./login.module.css";
+import { useRouter } from "next/router";
 
-export default function login() {
+export default function Login() { 
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
+  const [error, setError] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+
+    const postData = {
+      username: formData.username,
+      password: formData.password,
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/v1/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      console.log('Login successful', data);
+
+      localStorage.setItem('authToken', data.token);
+
+      router.push("/home"); 
+    } catch (error) {
+      setError(error.message);
+    }
   };
+
   return (
     <div className={styles.formContainer}>
       <h1>Login</h1>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Register</button>
+      {error && <p className={styles.error}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="username"
+          name="username"
+          placeholder="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
 }

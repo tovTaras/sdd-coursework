@@ -6,12 +6,14 @@ import "react-datepicker/dist/react-datepicker.css";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  carId: number; // Add carId prop
 }
 
-const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId }) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -29,10 +31,35 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     setEndDate(date);
   };
 
-  const handleSend = () => {
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
-    onClose();
+  const handleSend = async () => {
+    if (!isButtonActive || isLoading) return;
+    setIsLoading(true);
+
+    try {
+      const requestBody = {
+        expected_return_date: endDate?.toISOString().split('T')[0], 
+      };
+      console.log(endDate?.toISOString().split('T')[0])
+
+      const response = await fetch(`http://127.0.0.1:8000/api/v1/rent-car/Taras-cp/${carId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to book the car');
+      }
+
+      console.log('Car booked successfully');
+      onClose(); 
+    } catch (error) {
+      console.error('Error booking the car:', error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,10 +92,10 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             </div>
             <button
               onClick={handleSend}
-              disabled={!isButtonActive}
+              disabled={!isButtonActive || isLoading} 
               className={styles.sendButton}
             >
-              Send
+              {isLoading ? 'Sending...' : 'Send'}
             </button>
           </div>
         </div>
