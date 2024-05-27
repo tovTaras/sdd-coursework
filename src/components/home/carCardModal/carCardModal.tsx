@@ -6,10 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  carId: number; // Add carId prop
+  carId: number;
+  bailAmount: number;
 }
 
-const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId }) => {
+const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId, bailAmount }) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
@@ -37,9 +38,8 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId }) => {
 
     try {
       const requestBody = {
-        expected_return_date: endDate?.toISOString().split('T')[0], 
+        expected_return_date: endDate?.toISOString().split('T')[0],
       };
-      console.log(endDate?.toISOString().split('T')[0])
 
       const response = await fetch(`http://127.0.0.1:8000/api/v1/rent-car/Taras-cp/${carId}/`, {
         method: 'POST',
@@ -54,7 +54,7 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId }) => {
       }
 
       console.log('Car booked successfully');
-      onClose(); 
+      onClose();
     } catch (error) {
       console.error('Error booking the car:', error.message);
     } finally {
@@ -70,33 +70,44 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId }) => {
             className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <div>
-              <label>Start Date: </label>
-              <DatePicker
-                selected={startDate}
-                onChange={handleStartDateChange}
-                dateFormat="dd/MM/yyyy"
-                minDate={new Date()}
-                className={styles.datePicker}
-              />
+            <div className={styles.modalHeader}>
+              <h2>Book Car</h2>
+              <button className={styles.closeButton} onClick={onClose}>
+                &times;
+              </button>
             </div>
-            <div>
-              <label>End Date: </label>
-              <DatePicker
-                selected={endDate}
-                onChange={handleEndDateChange}
-                dateFormat="dd/MM/yyyy"
-                minDate={startDate || new Date()}
-                className={styles.datePicker}
-              />
+            <div className={styles.modalBody}>
+              <div>
+                <label>Bail amount: </label> {bailAmount}$
+              </div>
+              <div>
+                <label>Start Date: </label>
+                <DatePicker
+                  selected={startDate}
+                  onChange={handleStartDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  minDate={new Date()}
+                  className={styles.datePicker}
+                />
+              </div>
+              <div>
+                <label>End Date: </label>
+                <DatePicker
+                  selected={endDate}
+                  onChange={handleEndDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  minDate={startDate || new Date()}
+                  className={styles.datePicker}
+                />
+              </div>
+              <button
+                onClick={handleSend}
+                disabled={!isButtonActive || isLoading}
+                className={styles.sendButton}
+              >
+                {isLoading ? 'Sending...' : 'Send'}
+              </button>
             </div>
-            <button
-              onClick={handleSend}
-              disabled={!isButtonActive || isLoading} 
-              className={styles.sendButton}
-            >
-              {isLoading ? 'Sending...' : 'Send'}
-            </button>
           </div>
         </div>
       )}

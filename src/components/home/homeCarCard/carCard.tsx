@@ -17,6 +17,7 @@ interface Car {
 
 interface CarCardProps {
   car: Car;
+  bailAmount?: number;
 }
 
 
@@ -33,7 +34,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  
+  const handleBailAmount = Math.round(car.price_per_day + car.price_per_day*1.1)
   return (
     <div className={styles.carCard}>
       <div className={styles.carDetails}>
@@ -56,11 +57,11 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
       </div>
       <button
         className={styles.bookBtn}
-        onClick={() => (isOpen ? closeModal() : openModal())}
+        onClick={openModal}
       >
-        {isOpen ? "Close Modal" : "Book"}
+       Book
       </button>
-      <CarCardModal carId={car.id} isOpen={isOpen} onClose={closeModal} />
+      <CarCardModal carId={car.id} isOpen={isOpen} onClose={closeModal} bailAmount={handleBailAmount} />
     </div>
   );
 };

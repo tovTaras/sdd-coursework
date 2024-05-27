@@ -28,13 +28,22 @@ export default function Home() {
     fetchCarData();
   }, []);
 
+  const handleClearFilters = () => {
+    setFilteredPrice(null);
+  };
+
   const handleFilterChange = (price: number | null) => {
     setFilteredPrice(price);
   };
 
-  const handleSortByAvailability = (date: Date) => {
-    console.log("Sorting by availability:", date);
-  };
+  const filteredCars = carData
+    .reduce((acc, item) => [...acc, ...item.cars], [])
+    .filter((car) => {
+      if (filteredPrice === null) {
+        return true;
+      }
+      return car.price_per_day <= filteredPrice;
+    });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,17 +53,16 @@ export default function Home() {
     return <div>Error: {error}</div>;
   }
 
+ 
   return (
     <div>
       <Navbar
         onFilterChange={handleFilterChange}
-        onSortByAvailability={handleSortByAvailability}
+        onClearFilters={handleClearFilters}
       />
       <div className={styles.carList}>
-        {carData.map((item) => (
-          item.cars.map((car) => (
-            <CarCard key={car.id} car={car} />
-          ))
+      {filteredCars.map((car) => (
+          <CarCard key={car.id} car={car} />
         ))}
       </div>
     </div>
