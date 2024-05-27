@@ -38,13 +38,16 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId, bailAmount
 
     try {
       const requestBody = {
-        expected_return_date: endDate?.toISOString().split('T')[0],
+        'expected_return_date': endDate?.toISOString().split('T')[0],
+        'rental_date': startDate?.toISOString().split('T')[0],
+        'deposit_amount': bailAmount,
       };
 
       const response = await fetch(`http://127.0.0.1:8000/api/v1/rent-car/Taras-cp/${carId}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Session-Key': localStorage.getItem('authToken') || '',
         },
         body: JSON.stringify(requestBody),
       });

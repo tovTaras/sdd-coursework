@@ -39,7 +39,7 @@ export default function Login() {
       const data = await response.json();
       console.log('Login successful', data);
 
-      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('authToken', data.session_key);
 
       router.push("/home"); 
     } catch (error:any) {
