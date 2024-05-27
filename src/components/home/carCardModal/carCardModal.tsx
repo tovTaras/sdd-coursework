@@ -55,7 +55,7 @@ const CarCardModal: React.FC<ModalProps> = ({ isOpen, onClose, carId, bailAmount
 
       console.log('Car booked successfully');
       onClose();
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error booking the car:', error.message);
     } finally {
       setIsLoading(false);

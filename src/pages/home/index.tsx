@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./home.module.css";
 import CarCard from "../../components/home/homeCarCard/carCard";
 import Navbar from "@/components/home/navbar/navbar";
+import {Car} from "../../interfaces/carInterfaces"
 
 export default function Home() {
   const [carData, setCarData] = useState([]);
@@ -18,13 +19,12 @@ export default function Home() {
         }
         const data = await response.json();
         setCarData(data);
-      } catch (error) {
+      } catch (error:any) {
         setError(error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchCarData();
   }, []);
 
@@ -37,13 +37,13 @@ export default function Home() {
   };
 
   const filteredCars = carData
-    .reduce((acc, item) => [...acc, ...item.cars], [])
-    .filter((car) => {
-      if (filteredPrice === null) {
-        return true;
-      }
-      return car.price_per_day <= filteredPrice;
-    });
+  .flatMap((item) => item.cars)
+  .filter((car: Car) => {
+    if (filteredPrice === null) {
+      return true;
+    }
+    return car.price_per_day <= filteredPrice;
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -61,7 +61,7 @@ export default function Home() {
         onClearFilters={handleClearFilters}
       />
       <div className={styles.carList}>
-      {filteredCars.map((car) => (
+      {filteredCars.map((car: Car) => (
           <CarCard key={car.id} car={car} />
         ))}
       </div>

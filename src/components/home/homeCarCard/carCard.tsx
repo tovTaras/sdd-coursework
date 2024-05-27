@@ -1,19 +1,9 @@
 import React, { useState } from "react";
 import CarCardModal from "../carCardModal/carCardModal"; 
 import styles from "./carCard.module.css";
+import {Car} from "../../../interfaces/carInterfaces"
 
-interface Car {
-  id: number;
-  name: string;
-  year: number;
 
-  price_per_day: number;
-
-  car_brand: string;
-  car_type: string;
-
-  penalty_amount: number;
-}
 
 interface CarCardProps {
   car: Car;

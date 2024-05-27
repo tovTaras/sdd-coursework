@@ -42,7 +42,7 @@ export default function Login() {
       localStorage.setItem('authToken', data.token);
 
       router.push("/home"); 
-    } catch (error) {
+    } catch (error:any) {
       setError(error.message);
     }
   };
