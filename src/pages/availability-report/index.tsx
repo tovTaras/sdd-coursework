@@ -13,7 +13,13 @@ export default function AvailabilityReport() {
     useEffect(() => {
       const fetchReport = async () => {
         try {
-          const response = await fetch('http://127.0.0.1:8000/api/v1/reports/Taras-cp/car-availability/');
+          const response = await fetch('http://127.0.0.1:8000/api/v1/reports/Taras-cp/car-availability/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Session-Key': localStorage.getItem('authToken') || '',
+            },
+          });
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }

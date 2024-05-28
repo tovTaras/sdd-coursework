@@ -13,7 +13,13 @@ export default function Home() {
   useEffect(() => {
     const fetchCarData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/auto-park-list/Taras-cp/');
+        const response = await fetch('http://127.0.0.1:8000/api/v1/auto-park-list/Taras-cp/', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-Session-Key': localStorage.getItem('authToken') || '',  
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
