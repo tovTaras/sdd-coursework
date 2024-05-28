@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./navbar.module.css";
+import { useRouter } from 'next/router';
 
 interface NavbarProps {
   onFilterChange: (price: number | null) => void;
@@ -9,6 +10,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onFilterChange, onClearFilters }) => {
+  const router = useRouter();
   const [customPrice, setCustomPrice] = useState<string>("");
 
   const handleCustomPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +33,17 @@ const Navbar: React.FC<NavbarProps> = ({ onFilterChange, onClearFilters }) => {
 
   return (
     <nav className={styles.navbar}>
-      <div>
+      <button className={styles.applyButton} onClick={() => {
+          router.push('/availability-report')
+        }}>
+        Availability Report
+      </button>
+      <button className={styles.applyButton} onClick={() => {
+          router.push('/financial-report')
+        }}>
+        Financial Report
+      </button>
+      <div className={styles.priceDiv}>
         <div>PRICE</div>
         <input
           className={styles.customPriceInput}

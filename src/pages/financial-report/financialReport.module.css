@@ -1,0 +1,18 @@
+.applyButton {
+    height: 2.2rem;
+    width: 7rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 7px;
+    margin-top: 9px;
+  }
+.applyButton:hover {
+    background-color: #0056b3;
+}
+.reportItemsList {
+    display: flex;
+    flex-wrap: wrap;
+}

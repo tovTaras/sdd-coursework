@@ -1,0 +1,28 @@
+.reportItem {
+    width: 23rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 10px;
+}
+.reportItem-details {
+    padding: 10px;
+}
+
+.reportItem-details h2 {
+    margin-top: 0;
+}
+
+.reportItem-details p {
+    margin: 5px 0;
+}
+
+.reportItem-details strong {
+    font-weight: bold;
+}
